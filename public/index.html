@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Image Uploader and Resizer</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.1.2/dist/tailwind.min.css" rel="stylesheet">
+
+<style>
+  html {
+    background-color: #05040a;
+
+  }
+  body {
+    background-image: url("back.gif");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.4); /* Adjust transparency using rgba */
+  border-radius: 10px; /* Optional: for rounded corners */
+  padding: 20px; /* Optional: for spacing inside the box */
+  backdrop-filter: blur(10px); /* Create the blur effect */
+  border: 1px solid rgba(255, 255, 255, 0.2); /* Optional: add a subtle border */
+}
+
+</style>
+
+</head>
+
+
+
+<body class="bg-gray-100">
+
+<div class="container mx-auto px-4 py-8 ">
+  <div class="max-w-sm mx-auto ">
+    <form class="glass shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="mb-4">
+        <h2 class="text-2xl font-semibold text-gray-900">Bit Kid Pixelator</h2>
+      </div>
+      <div class="mb-4">
+
+        <label class="block text-gray-900 text-sm font-bold mb-2" for="imageLoader">
+          Upload Image
+        </label>
+        <input class="glass shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="file" id="imageLoader" accept="image/*" />
+      </div>
+      <div class="flex items-center justify-between">
+        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="button">
+          Upload
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="max-w-sm mx-auto">
+    <div class=" shadow-md rounded px-8 pt-6 pb-8 mb-4">
+      <div class="mb-4">
+        <canvas id="imageCanvas" class="max-w-full h-auto "></canvas>
+      </div>
+      <button id="downloadBtn" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" style="display:none;">
+        Download
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('imageLoader').addEventListener('change', handleImageUpload, false);
+
+async function handleImageUpload(e) {
+  const file = e.target.files[0];
+  if (!file) {
+    return;
+  }
+
+  // Prepare the form data to send to the server
+  const formData = new FormData();
+  formData.append('image', file);
+
+  // Send the image to the server for processing
+  const response = await fetch('/upload', {
+    method: 'POST',
+    body: formData
+  });
+
+  if (response.ok) {
+    const imageBlob = await response.blob();
+    displayImage(imageBlob);
+  } else {
+    console.error('Server error:', response);
+  }
+}
+
+function displayImage(blob) {
+  const url = URL.createObjectURL(blob);
+  const canvas = document.getElementById('imageCanvas');
+  const ctx = canvas.getContext('2d');
+  const img = new Image();
+
+  img.onload = function() {
+    // Set canvas dimensions to match the image size
+    canvas.width = img.width * 5; // Scale up by a factor of 10 for example
+    canvas.height = img.height * 5;
+
+    // Disable smoothing on the canvas
+    ctx.imageSmoothingEnabled = false;
+
+    // Draw the image on the canvas scaled up
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    // Show the download button and set the download link
+    const downloadBtn = document.getElementById('downloadBtn');
+    downloadBtn.style.display = 'block';
+    downloadBtn.addEventListener('click', function() {
+      downloadImage(url);
+    });
+  };
+
+  img.src = url;
+}
+
+function downloadImage(url) {
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'resized_image.png';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+</script>
+
+</body>
+</html>
+
