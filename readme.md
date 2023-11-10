@@ -4,7 +4,16 @@ Simple tool to remove the  CRT effect from [BitKids](https://www.stargaze.zone/m
 
 ![Alt text](demo.png)
 
-## Prerequisites
+
+## Usage
+1. Download the PNG Bitkid file from your profile at [stargaze](https://www.stargaze.zone/)
+
+    <img src="image.png" width="200">
+
+2. Upload the image to the [demo site](https://pixels.danielfarina.com/) or follow instructions below to run your own copy locally. 
+
+
+## Running your own prerequisites
 
 Before running this project, make sure you have the following installed:
 - Node.js (10.x or above)
@@ -35,7 +44,7 @@ To start the application, run the following command in the terminal:
 ```
 npm start
 ```
-This will start the server on localhost with the default port 3001. You can access the application by navigating to http://localhost:3001 in your web browser.
+This will start the server on localhost with the default port 3001. You can access the application by navigating to http://localhost:5000 in your web browser.
 
 ### Uploading an Image
 To upload an image, click on the "Upload Image" button and select an image from your file system. The image will be automatically uploaded to the server, resized, and displayed in a pixelated format on the web page.
