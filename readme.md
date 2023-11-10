@@ -8,7 +8,7 @@ Simple tool to remove the  CRT effect from [BitKids](https://www.stargaze.zone/m
 ## Usage
 1. Download the PNG Bitkid file from your profile at [stargaze](https://www.stargaze.zone/)
 
-    <img src="image.png" width="200">
+    <img src="public/upload.png" width="200">
 
 2. Upload the image to the [demo site](https://pixels.danielfarina.com/) or follow instructions below to run your own copy locally. 
 
